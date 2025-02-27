@@ -1,0 +1,484 @@
+#uselib "kernel32.dll"
+#func GetTempPathA "GetTempPathA" int, var
+#cfunc CreateFileA "CreateFileA" sptr, int, int, int, int, int, int
+#func GetFileTime "GetFileTime" int, int, int, int
+#func CloseHandle "CloseHandle" int
+#func FileTimeToLocalFileTime "FileTimeToLocalFileTime" int, int
+#func FileTimeToSystemTime "FileTimeToSystemTime" int, int
+
+#uselib "psapi.dll"
+#func EnumProcesses "EnumProcesses" var, int, var
+
+#uselib "vslib.dll"
+#cfunc GetLibVersion "_GetLibVersion@0"
+#cfunc CheckVsCode "_CheckVsCode@16" int, int, int, int
+#func CreateProject "_CreateProject@4" var
+#func OpenProject "_OpenProject@8" var, sptr
+#func OpenProjectEx "_OpenProjectEx@16" var, sptr, var, int
+#func SaveProject "_SaveProject@8" int, sptr
+#func DeleteProject "_DeleteProject@4" int
+#cfunc GetPrjSampFreq "_GetPrjSampFreq@4" int
+#func SetPrjSampFreq "_SetPrjSampFreq@8" int, int
+#func GetPrjExpFormat "_GetPrjExpFormat@16" int, var, var, var
+#func SetPrjExpFormat "_SetPrjExpFormat@16" int, int, int, int
+#func GetPrjMasterVolume "_GetPrjMasterVolume@8" int, var
+#func SetPrjMasterVolume "_SetPrjMasterVolume@12" int, double
+#cfunc GetPrjMeasure "_GetPrjMeasure@4" int
+#func SetPrjMeasure "_SetPrjMeasure@8" int, int
+#cfunc GetPrjMeasBase "_GetPrjMeasBase@4" int
+#func SetPrjMeasBase "_SetPrjMeasBase@8" int, int
+#func GetPrjTempo "_GetPrjTempo@8" int, var
+#func SetPrjTempo "_SetPrjTempo@12" int, double
+#cfunc GetPrjSaveOption "_GetPrjSaveOption@4" int
+#func SetPrjSaveOption "_SetPrjSaveOption@8" int, int
+#cfunc GetTrackNum "_GetTrackNum@4" int
+#func AddTrack "_AddTrack@4" int
+#func CopyTrack "_CopyTrack@16" int, var, int, int
+#func UpTrack "_UpTrack@8" int, int
+#func DownTrack "_DownTrack@8" int, int
+#func DeleteTrack "_DeleteTrack@8" int, int
+#func GetTrackVolume "_GetTrackVolume@12" int, int, var
+#func SetTrackVolume "_SetTrackVolume@16" int, int, double
+#func GetTrackPan "_GetTrackPan@12" int, int, var
+#func SetTrackPan "_SetTrackPan@16" int, int, double
+#cfunc GetTrackInvertFlg "_GetTrackInvertFlg@8" int, int
+#func SetTrackInvertFlg "_SetTrackInvertFlg@12" int, int, int
+#cfunc GetTrackMuteFlg "_GetTrackMuteFlg@8" int, int
+#func SetTrackMuteFlg "_SetTrackMuteFlg@12" int, int, int
+#cfunc GetTrackSoloFlg "_GetTrackSoloFlg@8" int, int
+#func SetTrackSoloFlg "_SetTrackSoloFlg@12" int, int, int
+#func GetTrackName "_GetTrackName@12" int, int, var
+#func SetTrackName "_SetTrackName@12" int, int, sptr
+#cfunc GetTrackColor "_GetTrackColor@8" int, int
+#func SetTrackColor "_SetTrackColor@12" int, int, int
+#cfunc GetTrackSelFlg "_GetTrackSelFlg@8" int, int
+#func SetTrackSelFlg "_SetTrackSelFlg@12" int, int, int
+#cfunc GetTrackMorphingGroup "_GetTrackMorphingGroup@8" int, int
+#func SetTrackMorphingGroup "_SetTrackMorphingGroup@12" int, int, int
+#cfunc GetTrackOption "_GetTrackOption@8" int, int
+#func SetTrackOption "_SetTrackOption@12" int, int, int
+#cfunc GetPrjItemNum "_GetPrjItemNum@4" int
+#func AddPrjItem "_AddPrjItem@12" int, sptr, var
+#func CopyPrjItem "_CopyPrjItem@16" int, var, int, int
+#func DeletePrjItem "_DeletePrjItem@8" int, int
+#cfunc GetPrjItem "_GetPrjItem@8" int, int
+#cfunc GetPrjItemTrackNum "_GetPrjItemTrackNum@8" int, int
+#func SetPrjItemTrackNum "_SetPrjItemTrackNum@12" int, int, int
+#func GetPrjItemOffset "_GetPrjItemOffset@12" int, int, var
+#func SetPrjItemOffset "_SetPrjItemOffset@16" int, int, double
+#cfunc GetPrjItemOffsetAdd "_GetPrjItemOffsetAdd@8" int, int
+#func SetPrjItemOffsetAdd "_SetPrjItemOffsetAdd@12" int, int, int
+#cfunc GetPrjItemSelFlg "_GetPrjItemSelFlg@8" int, int
+#func SetPrjItemSelFlg "_SetPrjItemSelFlg@12" int, int, int
+#cfunc GetPrjItemId "_GetPrjItemId@8" int, int
+#cfunc GetItemNumId "_GetItemNumId@8" int, int
+#func GetPrjItemFreqA4 "_GetPrjItemFreqA4@12" int, int, var
+#func SetPrjItemFreqA4 "_SetPrjItemFreqA4@16" int, int, double
+#cfunc GetPrjItemKey "_GetPrjItemKey@8" int, int
+#func SetPrjItemKey "_SetPrjItemKey@12" int, int, int
+#cfunc GetPrjItemKeyType "_GetPrjItemKeyType@8" int, int
+#func SetPrjItemKeyType "_SetPrjItemKeyType@12" int, int, int
+#cfunc GetPrjItemOption "_GetPrjItemOption@8" int, int
+#func SetPrjItemOption "_SetPrjItemOption@12" int, int, int
+#cfunc GetPrjItemTune "_GetPrjItemTune@8" int, int
+#func SetPrjItemTune "_SetPrjItemTune@12" int, int, int
+#func GetPrjItemBaseFreq "_GetPrjItemBaseFreq@20" int, int, var, var, var
+#func SetPrjItemBaseFreq "_SetPrjItemBaseFreq@24" int, int, int, int, double
+#func GetPrjItemMeasOffset "_GetPrjItemMeasOffset@12" int, int, var
+#func SetPrjItemMeasOffset "_SetPrjItemMeasOffset@16" int, int, double
+#func GetPrjItemUserTune "_GetPrjItemUserTune@12" int, int, var
+#func SetPrjItemUserTune "_SetPrjItemUserTune@12" int, int, var
+#func AddPrjItemInit "_AddPrjItemInit@16" int, sptr, var, var
+#func AddPrjItemAnalyze "_AddPrjItemAnalyze@8" int, var
+#func AddPrjItemTerm "_AddPrjItemTerm@8" int, var
+#func SetAnalyzeInfo "_SetAnalyzeInfo@20" var, int, int, int, int
+#func GetAnalyzeProgress "_GetAnalyzeProgress@12" var, var, var
+#func CopyPrjItemEditPrm "_CopyPrjItemEditPrm@12" int, int, int
+#cfunc GetMixSample "_GetMixSample@4" int
+#func GetMixDataEx "_GetMixDataEx@52" int, var, int, int, int, int, int, int, int, int, int, double
+#func ExportMixFile "_ExportMixFile@12" int, sptr, int
+#func ExportMixFileInit "_ExportMixFileInit@16" int, var, sptr, int
+#func ExportMixFileExp "_ExportMixFileExp@16" int, var, var, var
+#func ExportMixFileTerm "_ExportMixFileTerm@8" int, var
+#func CheckMixVolume "_CheckMixVolume@16" int, int, var, var
+#func FadeWaveData "_FadeWaveData@16" var, int, int, int
+#func GetFFTSpectrum "_GetFFTSpectrum@16" int, var, int, int
+#func ReloadDoutWaveFile "_ReloadDoutWaveFile@12" int, int, sptr
+#func CloseDoutWaveFile "_CloseDoutWaveFile@8" int, int
+#cfunc GetII_orgSample "_GetII_orgSample@4" int
+#func GetII_waveFormat "_GetII_waveFormat@20" int, var, var, var, var
+#cfunc GetII_sampFreq "_GetII_sampFreq@4" int
+#cfunc GetII_channel "_GetII_channel@4" int
+#func GetII_fileName "_GetII_fileName@8" int, var
+#cfunc GetII_SMFFlag "_GetII_SMFFlag@4" int
+#cfunc GetII_editSample "_GetII_editSample@4" int
+#func GetII_waveRange "_GetII_waveRange@24" int, int, int, int, int, var
+#func GetII_waveRangeEx "_GetII_waveRangeEx@24" int, int, int, int, int, var
+#cfunc GetII_ctrlPntPs "_GetII_ctrlPntPs@4" int
+#cfunc GetII_nCtrlPnt "_GetII_nCtrlPnt@4" int
+#cfunc GetII_nTctrlPrm "_GetII_nTctrlPrm@4" int
+#cfunc GetII_AnalyzePrm "_GetII_AnalyzePrm@12" int, var, var
+#cfunc GetII_AnalyzePrmEx "_GetII_AnalyzePrmEx@16" int, var, var, var
+#cfunc GetIP_synthMode "_GetIP_synthMode@4" int
+#func SetIP_synthMode "_SetIP_synthMode@8" int, int
+#cfunc GetIP_synthOption "_GetIP_synthOption@4" int
+#func SetIP_synthOption "_SetIP_synthOption@8" int, int
+#cfunc GetIP_fadeInSample "_GetIP_fadeInSample@4" int
+#func SetIP_fadeInSample "_SetIP_fadeInSample@8" int, int
+#cfunc GetIP_fadeOutSample "_GetIP_fadeOutSample@4" int
+#func SetIP_fadeOutSample "_SetIP_fadeOutSample@8" int, int
+#func GetIP_EqGain "_GetIP_EqGain@12" int, var, var
+#func SetIP_EqGain "_SetIP_EqGain@12" int, var, var
+#func GetIP_HeqGain "_GetIP_HeqGain@8" int, var
+#func SetIP_HeqGain "_SetIP_HeqGain@8" int, var
+#func GetIP_tctrlTime "_GetIP_tctrlTime@16" int, int, var, var
+#func SetIP_tctrlTime "_SetIP_tctrlTime@24" int, int, double, double
+#func AddIP_tctrlTime "_AddIP_tctrlTime@20" int, double, double
+#func DelIP_tctrlTime "_DelIP_tctrlTime@8" int, int
+#cfunc GetIP_attackThr "_GetIP_attackThr@4" int
+#func SetIP_attackThr "_SetIP_attackThr@8" int, int
+#func DetectAttackTctrl "_DetectAttackTctrl@8" int, int
+#cfunc GetIP_nNote "_GetIP_nNote@4" int
+#func GetIP_noteData "_GetIP_noteData@24" int, int, var, var, var, var
+#func SetIP_noteData "_SetIP_noteData@24" int, int, int, int, int, int
+#func AddIP_noteData "_AddIP_noteData@16" int, int, int, int
+#func DelIP_noteData "_DelIP_noteData@8" int, int
+#func SetNotePitch "_SetNotePitch@4" int
+#func DetectNote "_DetectNote@4" int
+#func CreateNoteWeight "_CreateNoteWeight@20" int, var, int, int, var
+#cfunc GetIP_nLabel "_GetIP_nLabel@4" int
+#func GetIP_label "_GetIP_label@24" int, int, var, var, var, var
+#func SetIP_label "_SetIP_label@24" int, int, int, int, var, int
+#func AddIP_label "_AddIP_label@16" int, int, int, var
+#func DelIP_label "_DelIP_label@8" int, int
+#func SortIP_label "_SortIP_label@4" int
+#cfunc GetICP_pit_analyze "_GetICP_pit_analyze@12" int, int, int
+#func SetICP_pit_analyze "_SetICP_pit_analyze@16" int, int, int, int
+#cfunc GetICP_pit_org "_GetICP_pit_org@8" int, int
+#func SetICP_pit_org "_SetICP_pit_org@12" int, int, int
+#cfunc GetICP_pit_edit "_GetICP_pit_edit@8" int, int
+#func SetICP_pit_edit "_SetICP_pit_edit@12" int, int, int
+#cfunc GetICP_frm "_GetICP_frm@8" int, int
+#func SetICP_frm "_SetICP_frm@12" int, int, int
+#cfunc GetICP_breathiness "_GetICP_breathiness@8" int, int
+#func SetICP_breathiness "_SetICP_breathiness@12" int, int, int
+#cfunc GetICP_brightness "_GetICP_brightness@8" int, int
+#func SetICP_brightness "_SetICP_brightness@12" int, int, int
+#cfunc GetICP_clearness "_GetICP_clearness@8" int, int
+#func SetICP_clearness "_SetICP_clearness@12" int, int, int
+#cfunc GetICP_Heq "_GetICP_Heq@8" int, int
+#func SetICP_Heq "_SetICP_Heq@12" int, int, int
+#func GetICP_dyn_org "_GetICP_dyn_org@12" int, int, var
+#func SetICP_dyn_org "_SetICP_dyn_org@16" int, int, double
+#func GetICP_dyn_edit "_GetICP_dyn_edit@12" int, int, var
+#func SetICP_dyn_edit "_SetICP_dyn_edit@16" int, int, double
+#func GetICP_vol "_GetICP_vol@12" int, int, var
+#func SetICP_vol "_SetICP_vol@16" int, int, double
+#func GetICP_pan "_GetICP_pan@12" int, int, var
+#func SetICP_pan "_SetICP_pan@16" int, int, double
+#cfunc GetICP_fix_org "_GetICP_fix_org@8" int, int
+#func SetICP_fix_org "_SetICP_fix_org@12" int, int, int
+#cfunc GetICP_fix_edit "_GetICP_fix_edit@8" int, int
+#func SetICP_fix_edit "_SetICP_fix_edit@12" int, int, int
+#func GetICP_wave "_GetICP_wave@12" int, int, var
+#func GetStretchOrgSmp "_GetStretchOrgSmp@20" int, double, var, var
+#func GetStretchEdtSmp "_GetStretchEdtSmp@20" int, double, var, var
+#func GetStretchOrgSec "_GetStretchOrgSec@20" int, double, var, var
+#func GetStretchEdtSec "_GetStretchEdtSec@20" int, double, var, var
+#func CopyItemEditPrm "_CopyItemEditPrm@8" int, int
+#func GetIP_fixThrDyn "_GetIP_fixThrDyn@12" int, var, var
+#func SetIP_fixThrDyn "_SetIP_fixThrDyn@12" int, int, int
+#func AnalyzeFixFlg "_AnalyzeFixFlg@12" int, int, int
+#func UpdateRhythmTimeCtrl "_UpdateRhythmTimeCtrl@4" int
+#func ReleaseItemSpcData "_ReleaseItemSpcData@4" int
+#func InitItemSpcData "_InitItemSpcData@24" int, int, int, int, int, var
+#func AnalyzeItemSpc "_AnalyzeItemSpc@12" int, int, int
+#cfunc GetSpcRatio "_GetSpcRatio@4" int
+#func SetSpcRatio "_SetSpcRatio@8" int, int
+#cfunc GetSpcBlock "_GetSpcBlock@4" int
+#func DrawGraph "_DrawGraph@36" bmscr, int, var, int, int, int, double, var
+#func InitializeColorTable "_InitializeColorTable@0"
+#func SetColorTable "_SetColorTable@8" int, int
+#cfunc GetColorTable "_GetColorTable@4" int
+#func SetWaveDecodeInfo "_SetWaveDecodeInfo@8" int, sptr
+#func MergeSort_int "_MergeSort_int@12" var, var, int
+#func MergeSort_double "_MergeSort_double@12" var, var, int
+#func vslibSaveFile "_vslibSaveFile@12" sptr, var, int
+#cfunc GetMidiInProcPtr "_GetMidiInProcPtr@0"
+#cfunc GetMidiTime "_GetMidiTime@8" int, var
+#func WaveCheckFormat "_WaveCheckFormat@16" sptr, var, var, var
+#func GetWaveFormatError "_GetWaveFormatError@8" var, int
+#func LoadSMF "_LoadSMF@16" sptr, int, int, int
+#func AddLogData "_AddLogData@4" sptr
+#cfunc GetLogDataMax "_GetLogDataMax@0"
+#func GetLogData "_GetLogData@12" int, var, var
+#func SetVsTempPath "_SetVsTempPath@8" sptr, int
+#func LoadEngineDll "_LoadEngineDll@8" int, sptr
+#func FreeEngineDll "_FreeEngineDll@0"
+#func ClearItemTable "_ClearItemTable@0"
+#cfunc CheckItemTable "_CheckItemTable@4" int
+#cfunc UpdateItemTable "_UpdateItemTable@4" int
+#cfunc WaitUpdateItemTable "_WaitUpdateItemTable@8" int, var
+
+	goto *label_17
+#defcfunc vslib_getprjmastervolume int prm_546
+	var_0 = 1,0
+	GetPrjMasterVolume prm_546, var_0
+	return var_0
+#defcfunc vslib_getprjtempo int prm_547
+	var_1 = 120,0
+	GetPrjTempo prm_547, var_1
+	return var_1
+#defcfunc vslib_gettrackvolume int prm_548, int prm_549
+	var_0 = 1,0
+	GetTrackVolume prm_548, prm_549, var_0
+	return var_0
+#defcfunc vslib_gettrackpan int prm_550, int prm_551
+	var_2 = 0,0
+	GetTrackPan prm_550, prm_551, var_2
+	return var_2
+#defcfunc vslib_gettrackname int prm_552, int prm_553
+	sdim var_3, 260
+	GetTrackName prm_552, prm_553, var_3
+	return var_3
+#defcfunc vslib_getprjitemoffset int prm_554, int prm_555
+	var_4 = 0,0
+	GetPrjItemOffset prm_554, prm_555, var_4
+	return var_4
+#defcfunc vslib_getprjitemfreqa4 int prm_556, int prm_557
+	var_5 = 0,0
+	GetPrjItemFreqA4 prm_556, prm_557, var_5
+	return var_5
+#defcfunc vslib_getprjitemmeasoffset int prm_558, int prm_559
+	var_6 = 0,0
+	GetPrjItemMeasOffset prm_558, prm_559, var_6
+	return var_6
+#defcfunc vslib_getii_filename int prm_560
+	sdim var_3, 260
+	GetII_fileName prm_560, var_3
+	return var_3
+#defcfunc vslib_geticp_dyn_org int prm_561, int prm_562
+	var_7 = 0,0
+	GetICP_dyn_org prm_561, prm_562, var_7
+	return var_7
+#defcfunc vslib_geticp_dyn_edit int prm_563, int prm_564
+	var_7 = 0,0
+	GetICP_dyn_edit prm_563, prm_564, var_7
+	return var_7
+#defcfunc vslib_geticp_vol int prm_565, int prm_566
+	var_0 = 0,0
+	GetICP_vol prm_565, prm_566, var_0
+	return var_0
+#defcfunc vslib_geticp_pan int prm_567, int prm_568
+	var_2 = 0,0
+	GetICP_pan prm_567, prm_568, var_2
+	return var_2
+#defcfunc vslib_getstretchorgsmp int prm_569, double prm_570, var prm_571
+	var_8 = 0,0
+	GetStretchOrgSmp prm_569, prm_570, var_8, prm_571
+	return var_8
+#defcfunc vslib_getstretchedtsmp int prm_572, double prm_573, var prm_574
+	var_9 = 0,0
+	GetStretchEdtSmp prm_572, prm_573, var_9, prm_574
+	return var_9
+#defcfunc vslib_getstretchorgsec int prm_575, double prm_576, var prm_577
+	var_10 = 0,0
+	GetStretchOrgSec prm_575, prm_576, var_10, prm_577
+	return var_10
+#defcfunc vslib_getstretchedtsec int prm_578, double prm_579, var prm_580
+	var_11 = 0,0
+	GetStretchEdtSec prm_578, prm_579, var_11, prm_580
+	return var_11
+*label_17
+	goto *label_21
+#deffunc getfilewritetime str prm_597, array prm_598
+	var_12 = CreateFileA(prm_597, -2147483648, 1, 0, 3, 128, 0)
+	if ( var_12 != (-1) ) {
+		dim var_13, 4
+		GetFileTime var_12, 0, 0, varptr(var_13)
+		CloseHandle var_12
+		dim var_14, 4
+		FileTimeToLocalFileTime varptr(var_13), varptr(var_14)
+		dim var_15, 4
+		FileTimeToSystemTime varptr(var_14), varptr(var_15)
+		repeat 8
+			prm_598(cnt) = wpeek(var_15, cnt * 2)
+		loop
+	}
+	return
+#defcfunc cnvtimestr array prm_599
+	return strf("%04d/%02d/%02d %02d:%02d:%02d", prm_599(0), prm_599(1), prm_599(3), prm_599(4), prm_599(5), prm_599(6))
+#defcfunc chktime array prm_600, array prm_601
+	var_16 = cnvtimestr(prm_600)
+	var_17 = cnvtimestr(prm_601)
+	var_18 = strlen(var_16)
+	var_19 = 0
+	repeat var_18
+		var_20 = peek(var_16, cnt)
+		var_21 = peek(var_17, cnt)
+		if ( var_20 > var_21 ) {
+			var_19 = 1
+			break
+		}
+		if ( var_21 > var_20 ) {
+			var_19 = 2
+			break
+		}
+	loop
+	return var_19
+*label_21
+	goto *label_23
+#deffunc recoverproject str prm_602
+	dialog "vshp", 17, "プロジェクトファイル"
+	var_22 = stat
+	var_23 = refstr
+	if ( var_22 == 1 ) {
+		var_24 = 0
+		if ( getpath(var_23, 2) == "" ) {
+			var_23 = var_23 + ".vshp"
+			var_24 = 1
+		}
+		exist prm_602
+		if ( strsize > 0 ) {
+			var_25 = 0
+			exist var_23
+			if ( strsize > 0 & var_24 == 1 ) {
+				dialog "上書きしますか?", 2
+				if ( stat == 6 ) {
+					var_25 = 1
+				}
+			}
+			else {
+				var_25 = 1
+			}
+			if ( var_25 == 1 ) {
+				bcopy prm_602, var_23
+			}
+		}
+		else {
+			dialog "復旧対象のファイルが見つかりません。"
+		}
+	}
+	return
+*label_23
+	exist dirinfo(0) + "\\vslib.dll"
+	if ( strsize <= 0 ) {
+		dialog "本ツールをVocalShifterがインストールされているフォルダに\nコピーしてからご利用ください。"
+		end
+	}
+	sdim var_26, 260
+	GetTempPathA 260, var_26
+	var_27 = var_26 + "vocalshifter_tmp\\"
+	var_28 = var_27 + "backup1.vshp"
+	dim var_29, 8
+	exist var_28
+	if ( strsize > 0 ) {
+		getfilewritetime var_28, var_29
+	}
+	else {
+		var_28 = ""
+	}
+	var_30 = var_27 + "backup2.vshp"
+	dim var_31, 8
+	exist var_30
+	if ( strsize > 0 ) {
+		getfilewritetime var_30, var_31
+	}
+	else {
+		var_30 = ""
+	}
+	if ( var_28 == "" & var_30 == "" ) {
+		dialog "復旧可能なプロジェクトファイルはありません。"
+		end
+	}
+	dim var_32, 4096
+	EnumProcesses var_32, 4096 * 4, var_33
+	var_34 = var_33 / 4
+	var_35 = ""
+	dim var_36, 8
+	repeat 4
+		var_37 = cnt
+		var_38 = var_27 + "vstmp_" + var_37 + ".pid"
+		exist var_38
+		if ( strsize == 4 ) {
+			bload var_38, var_39, 4, 0
+			var_40 = 0
+			repeat var_34
+				if ( var_32(cnt) == var_39 ) {
+					var_40 = 1
+					break
+				}
+			loop
+			if ( var_40 == 1 ) {
+				continue
+			}
+		}
+		sdim var_41, 260
+		notesel var_41
+		chdir var_27
+		dirlist var_41, "vstmp_" + var_37 + "_*.vshp", 1
+		var_42 = noteinfo(0)
+		repeat var_42
+			noteget var_43, cnt
+			var_43 = var_27 + var_43
+			getfilewritetime var_43, var_44
+			if ( var_35 == "" ) {
+				var_35 = var_43
+				repeat 8
+					var_36(cnt) = var_44(cnt)
+				loop
+			}
+			else {
+				if ( chktime(var_44, var_36) == 1 ) {
+					var_35 = var_43
+					repeat 8
+						var_36(cnt) = var_44(cnt)
+					loop
+				}
+			}
+		loop
+	loop
+	screen 0, 660, 240
+	title "VocalShifterプロジェクトファイル復旧ツール ver.1.31"
+	syscolor 15
+	boxf
+	syscolor 9
+	var_45 = 10
+	var_46 = 10
+	pos var_45, var_46
+	mes "【保存されていないプロジェクト】"
+	mes "　新規作成、開く、終了時に保存しなかったプロジェクトを復旧して保存します。"
+	pos var_45, var_46 + 50
+	if ( var_28 != "" ) {
+		mes "　バックアップ日時:" + cnvtimestr(var_29)
+		objsize 80, 22
+		pos var_45 + 400, var_46 + 50
+		button gosub "保存", *label_24
+	}
+	else {
+		mes "　復旧可能なプロジェクトはありません。"
+	}
+	var_45 = 10
+	var_46 = 110
+	pos var_45, var_46
+	mes "【異常終了したときに編集していたプロジェクト】"
+	mes "　VocalShifterが異常終了したときに編集していたプロジェクトを復旧して保存します。"
+	pos var_45, var_46 + 50
+	if ( var_35 != "" ) {
+		mes "　バックアップ日時:" + cnvtimestr(var_36)
+		objsize 80, 22
+		pos var_45 + 400, var_46 + 50
+		button gosub "保存", *label_25
+	}
+	else {
+		mes "　復旧可能なプロジェクトはありません。"
+	}
+	stop
+*label_24
+	recoverproject var_28
+	return
+	recoverproject var_30
+	return
+*label_25
+	recoverproject var_35
+	return
