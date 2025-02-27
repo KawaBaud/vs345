@@ -455,7 +455,7 @@ goto *main
 	mes "Restore and save projects that were not saved when creating, opening, or exiting VocalShifter."
 	pos x_pos, y_pos + 50
 	if ( backup1_path != "" ) {
-		mes "Backup time: " + cnvtimestr(backup2_time)
+		mes "Backup time: " + cnvtimestr(backup1_time)
 		objsize 80, 22
 		pos x_pos + 400, y_pos + 50
 		button gosub "Save", *save_backup1_proj
