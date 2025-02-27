@@ -1,6 +1,5 @@
 # VocalShifter v3.45
 
-Changes from original:
 - Added missing English and/or Japanese translations
 - Removed licence key registration from from "Help" tab
 - Removed "Manual" from "Help" tab
