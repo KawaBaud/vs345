@@ -1,3 +1,5 @@
 *.ax
-obj
 hsptmp
+hsptmp.exe
+packfile
+obj
