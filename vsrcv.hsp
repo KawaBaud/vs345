@@ -222,19 +222,19 @@
 
 	goto *label_17
 #defcfunc vslib_getprjmastervolume int prm_546
-	var_0 = 1,0
+	var_0 = 1.0
 	GetPrjMasterVolume prm_546, var_0
 	return var_0
 #defcfunc vslib_getprjtempo int prm_547
-	var_1 = 120,0
+	var_1 = 120.0
 	GetPrjTempo prm_547, var_1
 	return var_1
 #defcfunc vslib_gettrackvolume int prm_548, int prm_549
-	var_0 = 1,0
+	var_0 = 1.0
 	GetTrackVolume prm_548, prm_549, var_0
 	return var_0
 #defcfunc vslib_gettrackpan int prm_550, int prm_551
-	var_2 = 0,0
+	var_2 = 0.0
 	GetTrackPan prm_550, prm_551, var_2
 	return var_2
 #defcfunc vslib_gettrackname int prm_552, int prm_553
@@ -242,15 +242,15 @@
 	GetTrackName prm_552, prm_553, var_3
 	return var_3
 #defcfunc vslib_getprjitemoffset int prm_554, int prm_555
-	var_4 = 0,0
+	var_4 = 0.0
 	GetPrjItemOffset prm_554, prm_555, var_4
 	return var_4
 #defcfunc vslib_getprjitemfreqa4 int prm_556, int prm_557
-	var_5 = 0,0
+	var_5 = 0.0
 	GetPrjItemFreqA4 prm_556, prm_557, var_5
 	return var_5
 #defcfunc vslib_getprjitemmeasoffset int prm_558, int prm_559
-	var_6 = 0,0
+	var_6 = 0.0
 	GetPrjItemMeasOffset prm_558, prm_559, var_6
 	return var_6
 #defcfunc vslib_getii_filename int prm_560
@@ -258,35 +258,35 @@
 	GetII_fileName prm_560, var_3
 	return var_3
 #defcfunc vslib_geticp_dyn_org int prm_561, int prm_562
-	var_7 = 0,0
+	var_7 = 0.0
 	GetICP_dyn_org prm_561, prm_562, var_7
 	return var_7
 #defcfunc vslib_geticp_dyn_edit int prm_563, int prm_564
-	var_7 = 0,0
+	var_7 = 0.0
 	GetICP_dyn_edit prm_563, prm_564, var_7
 	return var_7
 #defcfunc vslib_geticp_vol int prm_565, int prm_566
-	var_0 = 0,0
+	var_0 = 0.0
 	GetICP_vol prm_565, prm_566, var_0
 	return var_0
 #defcfunc vslib_geticp_pan int prm_567, int prm_568
-	var_2 = 0,0
+	var_2 = 0.0
 	GetICP_pan prm_567, prm_568, var_2
 	return var_2
 #defcfunc vslib_getstretchorgsmp int prm_569, double prm_570, var prm_571
-	var_8 = 0,0
+	var_8 = 0.0
 	GetStretchOrgSmp prm_569, prm_570, var_8, prm_571
 	return var_8
 #defcfunc vslib_getstretchedtsmp int prm_572, double prm_573, var prm_574
-	var_9 = 0,0
+	var_9 = 0.0
 	GetStretchEdtSmp prm_572, prm_573, var_9, prm_574
 	return var_9
 #defcfunc vslib_getstretchorgsec int prm_575, double prm_576, var prm_577
-	var_10 = 0,0
+	var_10 = 0.0
 	GetStretchOrgSec prm_575, prm_576, var_10, prm_577
 	return var_10
 #defcfunc vslib_getstretchedtsec int prm_578, double prm_579, var prm_580
-	var_11 = 0,0
+	var_11 = 0.0
 	GetStretchEdtSec prm_578, prm_579, var_11, prm_580
 	return var_11
 *label_17
