@@ -220,265 +220,270 @@
 #cfunc UpdateItemTable "_UpdateItemTable@4" int
 #cfunc WaitUpdateItemTable "_WaitUpdateItemTable@8" int, var
 
-	goto *label_17
-#defcfunc vslib_getprjmastervolume int prm_546
-	var_0 = 1.0
-	GetPrjMasterVolume prm_546, var_0
-	return var_0
-#defcfunc vslib_getprjtempo int prm_547
-	var_1 = 120.0
-	GetPrjTempo prm_547, var_1
-	return var_1
-#defcfunc vslib_gettrackvolume int prm_548, int prm_549
-	var_0 = 1.0
-	GetTrackVolume prm_548, prm_549, var_0
-	return var_0
-#defcfunc vslib_gettrackpan int prm_550, int prm_551
-	var_2 = 0.0
-	GetTrackPan prm_550, prm_551, var_2
-	return var_2
-#defcfunc vslib_gettrackname int prm_552, int prm_553
-	sdim var_3, 260
-	GetTrackName prm_552, prm_553, var_3
-	return var_3
-#defcfunc vslib_getprjitemoffset int prm_554, int prm_555
-	var_4 = 0.0
-	GetPrjItemOffset prm_554, prm_555, var_4
-	return var_4
-#defcfunc vslib_getprjitemfreqa4 int prm_556, int prm_557
-	var_5 = 0.0
-	GetPrjItemFreqA4 prm_556, prm_557, var_5
-	return var_5
-#defcfunc vslib_getprjitemmeasoffset int prm_558, int prm_559
-	var_6 = 0.0
-	GetPrjItemMeasOffset prm_558, prm_559, var_6
-	return var_6
-#defcfunc vslib_getii_filename int prm_560
-	sdim var_3, 260
-	GetII_fileName prm_560, var_3
-	return var_3
-#defcfunc vslib_geticp_dyn_org int prm_561, int prm_562
-	var_7 = 0.0
-	GetICP_dyn_org prm_561, prm_562, var_7
-	return var_7
-#defcfunc vslib_geticp_dyn_edit int prm_563, int prm_564
-	var_7 = 0.0
-	GetICP_dyn_edit prm_563, prm_564, var_7
-	return var_7
-#defcfunc vslib_geticp_vol int prm_565, int prm_566
-	var_0 = 0.0
-	GetICP_vol prm_565, prm_566, var_0
-	return var_0
-#defcfunc vslib_geticp_pan int prm_567, int prm_568
-	var_2 = 0.0
-	GetICP_pan prm_567, prm_568, var_2
-	return var_2
-#defcfunc vslib_getstretchorgsmp int prm_569, double prm_570, var prm_571
-	var_8 = 0.0
-	GetStretchOrgSmp prm_569, prm_570, var_8, prm_571
-	return var_8
-#defcfunc vslib_getstretchedtsmp int prm_572, double prm_573, var prm_574
-	var_9 = 0.0
-	GetStretchEdtSmp prm_572, prm_573, var_9, prm_574
-	return var_9
-#defcfunc vslib_getstretchorgsec int prm_575, double prm_576, var prm_577
-	var_10 = 0.0
-	GetStretchOrgSec prm_575, prm_576, var_10, prm_577
-	return var_10
-#defcfunc vslib_getstretchedtsec int prm_578, double prm_579, var prm_580
-	var_11 = 0.0
-	GetStretchEdtSec prm_578, prm_579, var_11, prm_580
-	return var_11
-*label_17
-	goto *label_21
-#deffunc getfilewritetime str prm_597, array prm_598
-	var_12 = CreateFileA(prm_597, -2147483648, 1, 0, 3, 128, 0)
-	if ( var_12 != (-1) ) {
-		dim var_13, 4
-		GetFileTime var_12, 0, 0, varptr(var_13)
-		CloseHandle var_12
-		dim var_14, 4
-		FileTimeToLocalFileTime varptr(var_13), varptr(var_14)
-		dim var_15, 4
-		FileTimeToSystemTime varptr(var_14), varptr(var_15)
+goto *main
+
+#defcfunc vslib_getprjmastervolume int project_id
+	volume = 1.0
+	GetPrjMasterVolume project_id, volume
+	return volume
+#defcfunc vslib_getprjtempo int project_id
+	tempo = 120.0
+	GetPrjTempo project_id, tempo
+	return tempo
+#defcfunc vslib_gettrackvolume int project_id, int track_index
+	volume = 1.0
+	GetTrackVolume project_id, track_index, volume
+	return volume
+#defcfunc vslib_gettrackpan int project_id, int track_index
+	pan = 0.0
+	GetTrackPan project_id, track_index, pan
+	return pan
+#defcfunc vslib_gettrackname int project_id, int track_index
+	sdim name, 260
+	GetTrackName project_id, track_index, name
+	return name
+#defcfunc vslib_getprjitemoffset int project_id, int item_index
+	offset = 0.0
+	GetPrjItemOffset project_id, item_index, offset
+	return offset
+#defcfunc vslib_getprjitemfreqa4 int project_id, int item_index
+	freq = 0.0
+	GetPrjItemFreqA4 project_id, item_index, freq
+	return freq
+#defcfunc vslib_getprjitemmeasoffset int project_id, int item_index
+	measure_offset = 0.0
+	GetPrjItemMeasOffset project_id, item_index, measure_offset
+	return measure_offset
+#defcfunc vslib_getii_filename int item_index
+	sdim name, 260
+	GetII_fileName item_index, name
+	return name
+#defcfunc vslib_geticp_dyn_org int item_index, int ctrl_point_index
+	original_dynamic = 0.0
+	GetICP_dyn_org item_index, ctrl_point_index, original_dynamic
+	return original_dynamic
+#defcfunc vslib_geticp_dyn_edit int item_index, int ctrl_point_index
+	original_dynamic = 0.0
+	GetICP_dyn_edit item_index, ctrl_point_index, original_dynamic
+	return original_dynamic
+#defcfunc vslib_geticp_vol int item_index, int ctrl_point_index
+	volume = 0.0
+	GetICP_vol item_index, ctrl_point_index, volume
+	return volume
+#defcfunc vslib_geticp_pan int item_index, int ctrl_point_index
+	pan = 0.0
+	GetICP_pan item_index, ctrl_point_index, pan
+	return pan
+#defcfunc vslib_getstretchorgsmp int item_index, double seconds, var output
+	original_sample = 0.0
+	GetStretchOrgSmp item_index, seconds, original_sample, output
+	return original_sample
+#defcfunc vslib_getstretchedtsmp int item_index, double seconds, var output
+	edited_sample = 0.0
+	GetStretchEdtSmp item_index, seconds, edited_sample, output
+	return edited_sample
+#defcfunc vslib_getstretchorgsec int item_index, double seconds, var output
+	original_second = 0.0
+	GetStretchOrgSec item_index, seconds, original_second, output
+	return original_second
+#defcfunc vslib_getstretchedtsec int item_index, double seconds, var output
+	edited_second = 0.0
+	GetStretchEdtSec item_index, seconds, edited_second, output
+	return edited_second
+*main
+	goto *post_getfilewritetime
+#deffunc getfilewritetime str file_path, array time
+	file_handle = CreateFileA(file_path, -2147483648, 1, 0, 3, 128, 0)
+	if ( file_handle != (-1) ) {
+		dim file_time, 4
+		GetFileTime file_handle, 0, 0, varptr(file_time)
+		CloseHandle file_handle
+		dim local_file_time, 4
+		FileTimeToLocalFileTime varptr(file_time), varptr(local_file_time)
+		dim system_time, 4
+		FileTimeToSystemTime varptr(local_file_time), varptr(system_time)
 		repeat 8
-			prm_598(cnt) = wpeek(var_15, cnt * 2)
+			time(cnt) = wpeek(system_time, cnt * 2)
 		loop
 	}
 	return
-#defcfunc cnvtimestr array prm_599
-	return strf("%04d/%02d/%02d %02d:%02d:%02d", prm_599(0), prm_599(1), prm_599(3), prm_599(4), prm_599(5), prm_599(6))
-#defcfunc chktime array prm_600, array prm_601
-	var_16 = cnvtimestr(prm_600)
-	var_17 = cnvtimestr(prm_601)
-	var_18 = strlen(var_16)
-	var_19 = 0
-	repeat var_18
-		var_20 = peek(var_16, cnt)
-		var_21 = peek(var_17, cnt)
-		if ( var_20 > var_21 ) {
-			var_19 = 1
+#defcfunc cnvtimestr array time
+	return strf("%04d/%02d/%02d %02d:%02d:%02d", time(0), time(1), time(3), time(4), time(5), time(6))
+#defcfunc chktime array first, array second
+	date = cnvtimestr(first)
+	clock = cnvtimestr(second)
+	date_length = strlen(date)
+	result = 0
+	repeat date_length
+		date_char = peek(date, cnt)
+		clock_char = peek(clock, cnt)
+		if ( date_char > clock_char ) {
+			result = 1
 			break
 		}
-		if ( var_21 > var_20 ) {
-			var_19 = 2
+		if ( clock_char > date_char ) {
+			result = 2
 			break
 		}
 	loop
-	return var_19
-*label_21
-	goto *label_23
-#deffunc recoverproject str prm_602
-	dialog "vshp", 17, "プロジェクトファイル"
-	var_22 = stat
-	var_23 = refstr
-	if ( var_22 == 1 ) {
-		var_24 = 0
-		if ( getpath(var_23, 2) == "" ) {
-			var_23 = var_23 + ".vshp"
-			var_24 = 1
+	return result
+*post_getfilewritetime
+	goto *post_chkdll
+#deffunc recoverproject str backup_path
+	dialog "vshp", 17, "Project file"
+	recoverable = stat
+	proj_file_path = refstr
+	if ( recoverable == 1 ) {
+		ext_added = 0
+		if ( getpath(proj_file_path, 2) == "" ) {
+			proj_file_path = proj_file_path + ".vshp"
+			ext_added = 1
 		}
-		exist prm_602
+		exist backup_path
 		if ( strsize > 0 ) {
-			var_25 = 0
-			exist var_23
-			if ( strsize > 0 & var_24 == 1 ) {
-				dialog "上書きしますか?", 2
+			overwritten = 0
+			exist proj_file_path
+			if ( strsize > 0 & ext_added == 1 ) {
+				dialog "Overwrite?", 2
 				if ( stat == 6 ) {
-					var_25 = 1
+					overwritten = 1
 				}
 			}
 			else {
-				var_25 = 1
+				overwritten = 1
 			}
-			if ( var_25 == 1 ) {
-				bcopy prm_602, var_23
+			if ( overwritten == 1 ) {
+				bcopy backup_path, proj_file_path
 			}
 		}
 		else {
-			dialog "復旧対象のファイルが見つかりません。"
+			dialog "No recoverable project files."
 		}
 	}
 	return
-*label_23
+*post_chkdll
 	exist dirinfo(0) + "\\vslib.dll"
 	if ( strsize <= 0 ) {
-		dialog "本ツールをVocalShifterがインストールされているフォルダに\nコピーしてからご利用ください。"
+		dialog "Copy this tool to the folder where VocalShifter is installed and try again."
 		end
 	}
-	sdim var_26, 260
-	GetTempPathA 260, var_26
-	var_27 = var_26 + "vocalshifter_tmp\\"
-	var_28 = var_27 + "backup1.vshp"
-	dim var_29, 8
-	exist var_28
+	sdim temp_path, 260
+	GetTempPathA 260, temp_path
+	temp_dir_path = temp_path + "vocalshifter_tmp\\"
+	backup1_path = temp_dir_path + "backup1.vshp"
+	dim backup1_time, 8
+	exist backup1_path
 	if ( strsize > 0 ) {
-		getfilewritetime var_28, var_29
+		getfilewritetime backup1_path, backup1_time
+	}	
+	else {
+		backup1_path = ""
+	}
+	backup2_path = temp_dir_path + "backup2.vshp"
+	dim backup2_time, 8
+	exist backup2_path
+	if ( strsize > 0 ) {
+		getfilewritetime backup2_path, backup2_time
 	}
 	else {
-		var_28 = ""
+		backup2_path = ""
 	}
-	var_30 = var_27 + "backup2.vshp"
-	dim var_31, 8
-	exist var_30
-	if ( strsize > 0 ) {
-		getfilewritetime var_30, var_31
-	}
-	else {
-		var_30 = ""
-	}
-	if ( var_28 == "" & var_30 == "" ) {
-		dialog "復旧可能なプロジェクトファイルはありません。"
+	if ( backup1_path == "" & backup2_path == "" ) {
+		dialog "No recoverable project files."
 		end
 	}
-	dim var_32, 4096
-	EnumProcesses var_32, 4096 * 4, var_33
-	var_34 = var_33 / 4
-	var_35 = ""
-	dim var_36, 8
+	dim proc_id, 4096
+	proc_id_size = length(proc_id) * 4
+	EnumProcesses proc_id, proc_id_size, proc_id_size
+	proc_count = proc_id_size / 4
+	temp_proj_path = ""
+	dim temp_proj_time, 8
 	repeat 4
-		var_37 = cnt
-		var_38 = var_27 + "vstmp_" + var_37 + ".pid"
-		exist var_38
+		pid_index = cnt
+		pid_path = temp_dir_path + "vstmp_" + pid_index + ".pid"
+		exist pid_path
 		if ( strsize == 4 ) {
-			bload var_38, var_39, 4, 0
-			var_40 = 0
-			repeat var_34
-				if ( var_32(cnt) == var_39 ) {
-					var_40 = 1
+			proc_id_from_path = 0
+			bload pid_path, proc_id_from_path, 4, 0
+			proc_running_flag = 0
+			repeat proc_count
+				if ( proc_id(cnt) == proc_id_from_path ) {
+					proc_running_flag = 1
 					break
 				}
 			loop
-			if ( var_40 == 1 ) {
+			if ( proc_running_flag == 1 ) {
 				continue
 			}
 		}
-		sdim var_41, 260
-		notesel var_41
-		chdir var_27
-		dirlist var_41, "vstmp_" + var_37 + "_*.vshp", 1
-		var_42 = noteinfo(0)
-		repeat var_42
-			noteget var_43, cnt
-			var_43 = var_27 + var_43
-			getfilewritetime var_43, var_44
-			if ( var_35 == "" ) {
-				var_35 = var_43
+		sdim dir_listing_flag, 260
+		notesel dir_listing_flag
+		chdir temp_dir_path
+		dirlist dir_listing_flag, "vstmp_" + pid_index + "_*.vshp", 1
+		file_count = noteinfo(0)
+		sdim listed_file_name
+		dim listed_file_time, 8
+		repeat file_count
+			noteget listed_file_name, cnt
+			listed_file_name = temp_dir_path + listed_file_name
+			getfilewritetime listed_file_name, listed_file_time
+			if ( temp_proj_path == "" ) {
+				temp_proj_path = listed_file_name
 				repeat 8
-					var_36(cnt) = var_44(cnt)
+					temp_proj_time(cnt) = listed_file_time(cnt)
 				loop
 			}
 			else {
-				if ( chktime(var_44, var_36) == 1 ) {
-					var_35 = var_43
+				if ( chktime(listed_file_time, temp_proj_time) == 1 ) {
+					temp_proj_path = listed_file_name
 					repeat 8
-						var_36(cnt) = var_44(cnt)
+						temp_proj_time(cnt) = listed_file_time(cnt)
 					loop
 				}
 			}
 		loop
 	loop
-	screen 0, 660, 240
-	title "VocalShifterプロジェクトファイル復旧ツール ver.1.31"
+	screen 0, 770, 240
+	title "VocalShifter Project File Recovery Tool ver.1.31"
 	syscolor 15
 	boxf
 	syscolor 9
-	var_45 = 10
-	var_46 = 10
-	pos var_45, var_46
-	mes "【保存されていないプロジェクト】"
-	mes "　新規作成、開く、終了時に保存しなかったプロジェクトを復旧して保存します。"
-	pos var_45, var_46 + 50
-	if ( var_28 != "" ) {
-		mes "　バックアップ日時:" + cnvtimestr(var_29)
+	x_pos = 10
+	y_pos = 10
+	pos x_pos, y_pos
+	mes "[Projects not saved]"
+	mes "Restore and save projects that were not saved when creating, opening, or exiting VocalShifter."
+	pos x_pos, y_pos + 50
+	if ( backup1_path != "" ) {
+		mes "Backup time: " + cnvtimestr(backup2_time)
 		objsize 80, 22
-		pos var_45 + 400, var_46 + 50
-		button gosub "保存", *label_24
+		pos x_pos + 400, y_pos + 50
+		button gosub "Save", *save_backup1_proj
 	}
 	else {
-		mes "　復旧可能なプロジェクトはありません。"
+		mes "No recoverable projects."
 	}
-	var_45 = 10
-	var_46 = 110
-	pos var_45, var_46
-	mes "【異常終了したときに編集していたプロジェクト】"
-	mes "　VocalShifterが異常終了したときに編集していたプロジェクトを復旧して保存します。"
-	pos var_45, var_46 + 50
-	if ( var_35 != "" ) {
-		mes "　バックアップ日時:" + cnvtimestr(var_36)
+	x_pos = 10
+	y_pos = 110
+	pos x_pos, y_pos
+	mes "[Projects being edited when an abnormal termination occurred]"
+	mes "Restore and save projects that were being edited when VocalShifter terminated abnormally."
+	pos x_pos, y_pos + 50
+	if ( temp_proj_path != "" ) {
+		mes "Backup time:" + cnvtimestr(temp_proj_time)
 		objsize 80, 22
-		pos var_45 + 400, var_46 + 50
-		button gosub "保存", *label_25
+		pos x_pos + 400, y_pos + 50
+		button gosub "Save", *save_latest_temp_proj
 	}
 	else {
-		mes "　復旧可能なプロジェクトはありません。"
+		mes "No recoverable projects."
 	}
 	stop
-*label_24
-	recoverproject var_28
+*save_backup1_proj
+	recoverproject backup1_path
 	return
-	recoverproject var_30
+	recoverproject backup2_path
 	return
-*label_25
-	recoverproject var_35
+*save_latest_temp_proj
+	recoverproject temp_proj_path
 	return
