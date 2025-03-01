@@ -4,7 +4,8 @@
 - Removed licence key registration from "Help" tab
 - Removed "Manual" from "Help" tab
 
-## VocalShifter Project File Recovery Tool v1.31
+# Contribution
 
-- Renamed all the lost `var_`, `prm_` and `label_`s by guessing
-- Translated Japanese strings to English
+It would help a lot if somebody w/ experience programming in HSP3 would attempt splitting the 30K .hsp file into .as modules that I have declared. My background is Java->Rust->C++, so what do I know, right?
+
+I can try to attempt, but I can't guarantee that I'll succeed on my own.
