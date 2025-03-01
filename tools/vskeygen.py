@@ -8,75 +8,75 @@ def to_s32(value):
         return value - 0x100000000
     return value
 
-def getvscode(code1, code2):
-    if code1 != 0x5601:
+def getlicencecodeparts(magic_number, random_seed):
+    if magic_number != 0x5601:
         print("Oops! Wrong magic number for VocalShifter.")
         return [0, 0]
 
-    code1_a, code1_b, code1_c = 0x5601, 0x5601, 0
-    code3, code4 = 0, 0
+    state_a, state_b, state_c = 0x5601, 0x5601, 0
+    result_code1, result_code2 = 0, 0
 
     for _ in range(32):
-        inner_term = to_s32((code1_a & code2) | (code1_c & ~code1_a))
-        temp = to_s32(to_s32(code4) + to_s32(inner_term) + 0x5D2D273C)
+        masked_term = to_s32((state_a & random_seed) | (state_c & ~state_a))
+        sum_temp = to_s32(to_s32(result_code2) + to_s32(masked_term) + 0x5D2D273C)
         
-        right_shift = (temp >> 0x1D) & 0xFFFFFFFF
-        multiply = to_s32(0x8 * temp)
+        rotated_right = (sum_temp >> 0x1D) & 0xFFFFFFFF
+        rotated_left = to_s32(0x8 * sum_temp)
         
-        code1_a = to_s32(to_s32(code1_a) + to_s32(right_shift + multiply))
+        state_a = to_s32(to_s32(state_a) + to_s32(rotated_right + rotated_left))
         
-        xor_term = to_s32(code1_b ^ code1_c ^ code4)
-        temp_code_a = to_s32(to_s32(code2) + to_s32(xor_term) - 0x4498517B)
+        xor_result = to_s32(state_b ^ state_c ^ result_code2)
+        transform_a = to_s32(to_s32(random_seed) + to_s32(xor_result) - 0x4498517B)
         
-        inner_term2 = to_s32((code2 & code4) | (code1_c & ~code4))
-        combined = to_s32(to_s32(inner_term2) + to_s32(code1_b) - 0x2930C43F)
+        masked_term2 = to_s32((random_seed & result_code2) | (state_c & ~result_code2))
+        combined_sum = to_s32(to_s32(masked_term2) + to_s32(state_b) - 0x2930C43F)
         
-        left_shift = to_s32((combined << 0xA) & 0xFFFFFFFF)
-        right_shift2 = (combined >> 0x16) & 0xFFFFFFFF
-        code2_a = to_s32(to_s32(code2) + to_s32(left_shift + right_shift2))
+        shift_left = to_s32((combined_sum << 0xA) & 0xFFFFFFFF)
+        shift_right = (combined_sum >> 0x16) & 0xFFFFFFFF
+        next_input = to_s32(to_s32(random_seed) + to_s32(shift_left + shift_right))
         
-        temp_code_b = to_s32(to_s32(code1_b) ^ to_s32(code4 | ~code2))
-        code1_b = code1_a
+        transform_b = to_s32(to_s32(state_b) ^ to_s32(result_code2 | ~random_seed))
+        state_b = state_a
         
-        left_shift2 = to_s32((temp_code_a << 0x11) & 0xFFFFFFFF)
-        right_shift3 = (temp_code_a >> 0xF) & 0xFFFFFFFF
-        code3 = to_s32(to_s32(code1_c) + to_s32(right_shift3 + left_shift2))
+        transform_left = to_s32((transform_a << 0x11) & 0xFFFFFFFF)
+        transform_right = (transform_a >> 0xF) & 0xFFFFFFFF
+        result_code1 = to_s32(to_s32(state_c) + to_s32(transform_right + transform_left))
         
-        temp_code_c = to_s32(to_s32(temp_code_b) + to_s32(code1_c) - 0x5426DFEB)
-        code2 = code2_a
+        transform_c = to_s32(to_s32(transform_b) + to_s32(state_c) - 0x5426DFEB)
+        random_seed = next_input
         
-        left_shift3 = to_s32((temp_code_c << 0x18) & 0xFFFFFFFF)
-        right_shift4 = (temp_code_c >> 0x8) & 0xFFFFFFFF
-        code4 = to_s32(to_s32(code4) + to_s32(left_shift3 + right_shift4))
+        final_left = to_s32((transform_c << 0x18) & 0xFFFFFFFF)
+        final_right = (transform_c >> 0x8) & 0xFFFFFFFF
+        result_code2 = to_s32(to_s32(result_code2) + to_s32(final_left + final_right))
         
-        code1_c = code3
+        state_c = result_code1
 
-    return [code3, code4]
+    return [result_code1, result_code2]
 
-def convertlicencecode(code1, code2, code3, code4):
-    code1_a = to_s32(code1 ^ 0x1248)
-    code2_a = to_s32(code2 ^ 0x8421)
-    code3_a = to_s32(code3 ^ 0x1248)
-    code4_a = to_s32(code4 ^ 0x8421)
+def convertlicencecode(magic_number, random_seed, code3, code4):
+    xored_code1 = to_s32(magic_number ^ 0x1248)
+    xored_code2 = to_s32(random_seed ^ 0x8421)
+    xored_code3 = to_s32(code3 ^ 0x1248)
+    xored_code4 = to_s32(code4 ^ 0x8421)
 
-    code1 = to_s32((0x55AA & code2_a) + (0xAA55 & code4_a))
-    code2 = to_s32((0x55AA & code3_a) + (0xAA55 & code1_a))
-    code3 = to_s32((0x55AA & code4_a) + (0xAA55 & code2_a))
-    code4 = to_s32((0x55AA & code1_a) + (0xAA55 & code3_a))
+    final_code1 = to_s32((0x55AA & xored_code2) + (0xAA55 & xored_code4))
+    final_code2 = to_s32((0x55AA & xored_code3) + (0xAA55 & xored_code1))
+    final_code3 = to_s32((0x55AA & xored_code4) + (0xAA55 & xored_code2))
+    final_code4 = to_s32((0x55AA & xored_code1) + (0xAA55 & xored_code3))
     
-    return [code1 & 0xFFFF, code2 & 0xFFFF, code3 & 0xFFFF, code4 & 0xFFFF]
+    return [final_code1 & 0xFFFF, final_code2 & 0xFFFF, final_code3 & 0xFFFF, final_code4 & 0xFFFF]
 
 def generatelicencecode():
-    code1 = 0x5601
-    code2 = random.randint(0, 0xFFFF)
+    magic_number = 0x5601
+    random_seed = random.randint(0, 0xFFFF)
 
-    fetched_code = getvscode(code1, code2)
-    code3, code4 = fetched_code[0], fetched_code[1]
+    last_2_parts = getlicencecodeparts(magic_number, random_seed)
+    code3, code4 = last_2_parts[0], last_2_parts[1]
 
-    codes_b = convertlicencecode(code1, code2, code3, code4)
-    code1_b, code2_b, code3_b, code4_b = codes_b[0], codes_b[1], codes_b[2], codes_b[3]
+    converted_codes = convertlicencecode(magic_number, random_seed, code3, code4)
+    final_code1, final_code2, final_code3, final_code4 = converted_codes[0], converted_codes[1], converted_codes[2], converted_codes[3]
 
-    return f"{code4_b:04X}-{code1_b:04X}-{code2_b:04X}-{code3_b:04X}"
+    return f"{final_code4:04X}-{final_code1:04X}-{final_code2:04X}-{final_code3:04X}"
 
 def generate():
     try:
