@@ -1,16 +1,20 @@
+#pack "keydef_eng.d"
+#pack "keydef_jpn.d"
+#epack "vsbutton.bmp"
+
 #packopt name "vocalshifter"
-// #packopt icon "vocalshifter.ico"
+#packopt icon "vocalshifter.ico"
 
 #include "hsp3utf.as"
-#include "vsaudio.as"
-#include "vsconfig.as"
-#include "vscore.as"
-#include "vsedit.as"
-#include "vsgui.as"
-#include "vsmidi.as"
-#include "vsproject.as"
-#include "vsutil.as"
-#include "vsvst.as"
+// #include "vsaudio.as"
+// #include "vsconfig.as"
+// #include "vscore.as"
+// #include "vsedit.as"
+// #include "vsgui.as"
+// #include "vsmidi.as"
+// #include "vsproject.as"
+// #include "vsutil.as"
+// #include "vsvst.as"
 
 #uselib "kernel32.dll"
 #func LoadLibraryA "LoadLibraryA" str
@@ -28,26 +32,21 @@
 #cfunc WaitForSingleObject "WaitForSingleObject" int, int
 #cfunc GetEnvironmentVariableA "GetEnvironmentVariableA" var, var, int
 #cfunc CreatePipe "CreatePipe" var, var, var, int
-#func func_20 "CloseHandle" int
 #cfunc PeekNamedPipe "PeekNamedPipe" int, int, int, int, int, int
 #cfunc ReadFile "ReadFile" int, var, int, var, int
 #cfunc GetCurrentProcessId "GetCurrentProcessId"
-#cfunc func_23 "CreateFileA" sptr, int, int, int, int, int, int
 #func GetFileTime "GetFileTime" int, int, int, int
-#func func_24 "CloseHandle" int
 #func FileTimeToLocalFileTime "FileTimeToLocalFileTime" int, int
 #func FileTimeToSystemTime "FileTimeToSystemTime" int, int
 #cfunc CreateFileMappingA "CreateFileMappingA" int, int, int, int, int, sptr
 #cfunc MapViewOfFile "MapViewOfFile" int, int, int, int, int
 #func UnmapViewOfFile "UnmapViewOfFile" int
-#func func_38 "CloseHandle" int
-#func func_43 "Sleep" int
 
 #uselib "vslib.dll"
 #cfunc GetLibVersion "_GetLibVersion@0"
 #cfunc CheckVsCode "_CheckVsCode@16" int, int, int, int
 #func CreateProject "_CreateProject@4" var
-#func func_1 "_OpenProject@8" var, sptr
+#func OpenProject "_OpenProject@8" var, sptr
 #func OpenProjectEx "_OpenProjectEx@16" var, sptr, var, int
 #func func_2 "_SaveProject@8" int, sptr
 #func DeleteProject "_DeleteProject@4" int
@@ -1401,7 +1400,7 @@
 	}
 	var_132 = var_131(0)
 	var_126 = WaitForSingleObject(var_132, -1)
-	func_20 var_129
+	CloseHandle var_129
 	sdim var_133, 4096 + 1
 	prm_859 = ""
 	repeat
@@ -1418,7 +1417,7 @@
 		}
 		prm_859 += var_133
 	loop
-	func_20 var_128
+	CloseHandle var_128
 	sdim var_133, 0
 	sdim var_124, 0
 	return 0
@@ -4082,6 +4081,20 @@
 	var_409 = var_67(26)
 	var_410 = var_67(27)
 	var_411 = var_67(28)
+	var_67(29) = checklicencecode(var_408, var_409, var_410, var_411)
+	if ( var_67(29) == 0 ) {
+		if ( var_67(58) == 2 ) {
+			var_412 = "VocalShifter is Shareware.\n"
+			var_412 += "See readme to learn more about purchasing VocalShifter."
+		}
+		else {
+			var_412 = "VocalShifterを試用していただきありがとうございます。\n"
+			var_412 += "このソフトウェアはシェアウェアです。\n"
+			var_412 += "継続して使用する場合は、送金する必要があります。\n"
+			var_412 += "送金方法や試用中の制限についてはreadmeをご覧ください。"
+		}
+		msgdialog var_412
+	}
 	SetVsTempPath var_392(2), var_67(2)
 	LoadEngineDll 8, var_392(1) + "world4vs3.dll"
 	repeat 8
@@ -5183,7 +5196,7 @@
 	return 0
 *label_283
 	goto *label_286
-#deffunc openproject str prm_1064, int prm_1065
+#deffunc _openproject str prm_1064, int prm_1065
 	gsel 6
 	if ( prm_1065 == 0 ) {
 		if ( vsplay_getstatus(var_67(17)) == 1 ) {
@@ -5286,7 +5299,7 @@
 		sdim var_467, 0
 	}
 	else {
-		func_1 var_67(17), var_461
+		OpenProject var_67(17), var_461
 		var_466 = stat
 	}
 	if ( var_67(17) == 0 ) {
@@ -6329,7 +6342,7 @@
 		if ( var_596 > var_597 ) {
 			var_596--
 			var_599 = getundofilename(var_596)
-			openproject var_599, 1
+			_openproject var_599, 1
 			seteditflg
 			updatemainwindowmenu
 			updateidewindowmenu
@@ -6341,7 +6354,7 @@
 		if ( var_596 + 1 < var_597 + var_598 ) {
 			var_596++
 			var_599 = getundofilename(var_596)
-			openproject var_599, 1
+			_openproject var_599, 1
 			seteditflg
 			updatemainwindowmenu
 			updateidewindowmenu
@@ -6391,11 +6404,11 @@
 *label_327
 	goto *label_331
 #deffunc getfilewritetime str prm_1094, array prm_1095
-	var_605 = func_23(prm_1094, -2147483648, 1, 0, 3, 128, 0)
+	var_605 = CreateFileA(prm_1094, -2147483648, 1, 0, 3, 128, 0)
 	if ( var_605 != (-1) ) {
 		dim var_606, 4
 		GetFileTime var_605, 0, 0, varptr(var_606)
-		func_24 var_605
+		CloseHandle var_605
 		dim var_607, 4
 		FileTimeToLocalFileTime varptr(var_606), varptr(var_607)
 		dim var_608, 4
@@ -6588,7 +6601,7 @@
 	mes tltx("言語", "Language")
 	pos var_648 + 130, var_649
 	objsize 180, 22
-	combox var_637, 100, "Japanese/日本語\nEnglish/英語"
+	combox var_637, 100, tltx("日本語\n英語", "Japanese\nEnglish")
 	var_649 += var_650
 	pos var_648 + 10, var_649 + 4
 	mes tltx("【編集】", "[Editing]")
@@ -6792,7 +6805,7 @@
 		setmainalldrawflg
 		setidealldrawflg
 		if ( var_637 != var_638 ) {
-			msgdialog "Language setting is applied after restart VocalShifter.\n言語設定は再起動後に適用されます。"
+			msgdialog tltx("言語設定は再起動後に適用されます。", "Language setting is applied after restart VocalShifter.")
 		}
 	}
 	return
@@ -7650,6 +7663,19 @@
 	return
 *label_365
 	goto *label_367
+#deffunc openhelp
+	var_758 = var_392(1) + "vs3_manual.pdf"
+	exist var_758
+	if ( strsize == (-1) ) {
+		var_759 = ginfo(3)
+		gsel getactivewindow()
+		vserrordialog 341, ""
+		gsel var_759
+	}
+	else {
+		exec var_758, 16
+	}
+	return
 *label_367
 	goto *label_374
 #deffunc initscrollbar
@@ -8022,7 +8048,7 @@
 		createnewproject
 	}
 	if ( var_800(2) == 1 ) {
-		openproject ""
+		_openproject ""
 	}
 	if ( var_800(3) == 1 ) {
 		saveproject var_392(8)
@@ -8057,7 +8083,7 @@
 	}
 	repeat 10
 		if ( var_800(9 + cnt) == 1 ) {
-			openproject var_392(16 + cnt)
+			_openproject var_392(16 + cnt)
 		}
 	loop
 	if ( var_800(8) == 1 ) {
@@ -8700,6 +8726,12 @@
 	if ( var_800(33) == 1 ) {
 		openvolctrl
 	}
+	if ( var_800(34) == 1 ) {
+		openhelp
+	}
+	if ( var_800(35) == 1 ) {
+		inputlicencekey
+	}
 	if ( var_800(36) == 1 ) {
 		vsversioninfo
 	}
@@ -8779,6 +8811,8 @@
 	setsckeytable2 31, " CMD_SCK_SETTING", 0, tltx("ショートカットキー設定", "Shortcut key settings")
 	setsckeytable2 32, " CMD_SCROLL_SETTING", 0, tltx("スクロール設定", "Scroll settings")
 	setsckeytable2 33, " CMD_VOLCTR", 0, tltx("ボリュームコントロールを開く", "Open volume control")
+	setsckeytable2 34, " CMD_HELP", 111 + 1, tltx("マニュアル表示", "Manual")
+	setsckeytable2 35, " CMD_LICENCE", 0, tltx("ライセンスキー入力", "Input license key")
 	setsckeytable2 36, " CMD_VERINFO", 0, tltx("バージョン情報", "About")
 	setsckeytable2 37, " CMD_IDE_SWITCH_WND", 256 + 9, tltx("ウィンドウ切り替え", "Switch window")
 	var_809 = 3
@@ -9598,7 +9632,7 @@
 				return
 			}
 			if ( var_893 == 1146114902 ) {
-				openproject var_880
+				_openproject var_880
 				initquedragdrop
 				return
 			}
@@ -10001,7 +10035,7 @@
 					}
 				loop
 				sdim var_917, 0
-				func_1 var_924, var_914
+				OpenProject var_924, var_914
 				var_923 = stat
 				if ( var_924 != 0 ) {
 					var_925 = GetTrackNum(var_924)
@@ -10235,7 +10269,7 @@
 				}
 			loop
 			sdim var_947, 0
-			func_1 var_954, var_945
+			OpenProject var_954, var_945
 			var_953 = stat
 			if ( var_954 != 0 ) {
 				var_955 = GetPrjItemNum(var_954)
@@ -16088,6 +16122,8 @@
 	AppendMenuA var_1779, 0, 33, tltx("ボリュームコントロールを開く(&V)", "Open volume control")
 	CreatePopupMenu
 	var_1780 = stat
+	AppendMenuA var_1780, 0, 34, tltx("マニュアル表示(&M)", "Manual")
+	AppendMenuA var_1780, 0, 35, tltx("ライセンスキー入力(&L)...", "Input license key...")
 	AppendMenuA var_1780, 0, 36, tltx("バージョン情報(&I)", "About")
 	CreateMenu
 	var_1781 = stat
@@ -29066,6 +29102,8 @@
 	AppendMenuA var_3644, 0, 33, tltx("ボリュームコントロールを開く(&V)", "Open volume control")
 	CreatePopupMenu
 	var_3645 = stat
+	AppendMenuA var_3645, 0, 34, tltx("マニュアル表示(&M)", "Manual")
+	AppendMenuA var_3645, 0, 35, tltx("ライセンスキー入力(&L)...", "Input license key...")
 	AppendMenuA var_3645, 0, 36, tltx("バージョン情報(&I)", "About")
 	CreateMenu
 	var_3646 = stat
@@ -30255,7 +30293,7 @@
 		delete var_3815
 	}
 	UnmapViewOfFile var_3802
-	func_38 var_3799
+	CloseHandle var_3799
 	return
 #deffunc vsvst_setdebuginfotitle
 	var_3817 = ""
@@ -30371,7 +30409,7 @@
 		if ( var_3822(4) & 1 ) {
 			break
 		}
-		func_43 0
+		Sleep 0
 	loop
 	midiOutUnprepareHeader var_3821, varptr(var_3822), 48
 	return
@@ -30447,10 +30485,101 @@
 *label_927
 	_midi_prep
 	goto *label_929
+#defcfunc checklicencecode int prm_1472, int prm_1473, int prm_1474, int prm_1475
+	return CheckVsCode(prm_1472, prm_1473, prm_1474, prm_1475)
 *label_929
 	goto *label_931
+#deffunc convertlicencecode var code1, var code2, var code3, var code4
+	var_3826 = (21930 & code1) + (43605 & code3)
+	var_3827 = (21930 & code2) + (43605 & code4)
+	var_3828 = (21930 & code3) + (43605 & code1)
+	var_3829 = (21930 & code4) + (43605 & code2)
+	code1 = var_3826 ^ 4680
+	code2 = var_3827 ^ 33825
+	code3 = var_3828 ^ 4680
+	code4 = var_3829 ^ 33825
+	return
 *label_931
 	goto *label_936
+#deffunc inputlicencekey
+	code1 = var_67(25)
+	code2 = var_67(26)
+	code3 = var_67(27)
+	code4 = var_67(28)
+	sdim license_key, 64
+	if ( code1 == 22017 ) {
+		convertlicencecode code1, code2, code3, code4
+		license_key = strf("%04X-%04X-%04X-%04X", code1, code2, code3, code4)
+	}
+	screen_nomin 20, 320, 100, 2 | 4
+	title tltx("ライセンスキー入力", "License key")
+	syscolor 15
+	boxf
+	var_3836 = 10
+	syscolor 8
+	setfont_normal
+	objmode 2
+	pos 10, var_3836 + 4
+	mes tltx("ライセンスキー", "License key") + " : XXXX-XXXX-XXXX-XXXX"
+	var_3836 += 28
+	pos 10, var_3836
+	input license_key, 220, 22
+	var_3837 = stat
+	var_3836 += 28
+	var_3836 += 5
+	objsize 80, 22
+	pos 140, var_3836
+	button gosub tltx("OK", "OK"), *label_934
+	var_3838 = stat
+	pos 230, var_3836
+	button gosub tltx("キャンセル", "Cancel"), *label_933
+	objsel var_3837
+	waitobjectupdate
+	gsel 20, 2
+	var_3839 = -1
+	onkey gosub *label_935
+	repeat
+		gsel 20
+		var_3840 = var_3841
+		var_3841 = getkeyflg(27)
+		if ( var_67(20) == 20 ) {
+			var_67(20) = 0
+			var_3839 = 1
+		}
+		if ( getactivewindow() == 20 & var_3840 == 0 & var_3841 == 1 ) {
+			var_3839 = 1
+		}
+		if ( var_3839 != (-1) ) {
+			break
+		}
+		waitinputpolling
+	loop
+	onkey 0
+	gsel 20, -1
+	gsel 6
+	if ( var_3839 == 0 ) {
+		code1 = int("$" + strmid(license_key, 0, 4))
+		code2 = int("$" + strmid(license_key, 5, 4))
+		code3 = int("$" + strmid(license_key, 10, 4))
+		code4 = int("$" + strmid(license_key, 15, 4))
+		convertlicencecode code1, code2, code3, code4
+		var_67(29) = checklicencecode(code1, code2, code3, code4)
+		if ( var_67(29) == 1 ) {
+			msgdialog tltx("ライセンスキーを登録しました。", "The license key has been registered.")
+			var_67(25) = code1
+			var_67(26) = code2
+			var_67(27) = code3
+			var_67(28) = code4
+		}
+		else {
+			msgdialog tltx("無効なライセンスキーです。再度入力してください。", "The license key is invalid.")
+			var_67(25) = 0
+			var_67(26) = 0
+			var_67(27) = 0
+			var_67(28) = 0
+		}
+	}
+	return
 *label_933
 	var_3839 = 1
 	return
@@ -30499,13 +30628,13 @@
 	oncmd 0
 	onerror 0
 	onexit 0
-	var_3842 = tltx("内部エラーが発生したため" + "VocalShifter" + "を終了します。", "An internal error has occurred. VocalShifter will now exit.")
-	var_3842 += tltx("バージョン、エラー番号、発生時の状況をご連絡ください。\n\n", "Please report the version, error number, and circumstances when the error occurred.\n\n")
-	var_3842 += tltx("バージョン : ", "Version : ") + "VocalShifter ver.3.45" + "\n"
-	var_3842 += tltx("エラー番号 : ", "Error number : ") + wparam + "\n\n"
-	var_3842 += tltx("編集中のプロジェクトは「プロジェクトファイル復旧ツール」で", "The project being edited can be recovered using the 'Project File Recovery Tool'")
-	var_3842 += tltx("復旧することができます。詳細はreadmeをご覧ください。\n\n", "Please refer to the readme for details.\n\n")
-	var_3842 += "An internal error has occurred."
-	msgdialog var_3842
+	error_message = tltx("内部エラーが発生したため" + "VocalShifter" + "を終了します。", "An internal error has occurred. VocalShifter will now exit.")
+	error_message += tltx("バージョン、エラー番号、発生時の状況をご連絡ください。\n\n", "Please report the version, error number, and circumstances when the error occurred.\n\n")
+	error_message += tltx("バージョン : ", "Version : ") + "VocalShifter ver.3.45" + "\n"
+	error_message += tltx("エラー番号 : ", "Error number : ") + wparam + "\n\n"
+	error_message += tltx("編集中のプロジェクトは「プロジェクトファイル復旧ツール」で", "The project being edited can be recovered using the 'Project File Recovery Tool'")
+	error_message += tltx("復旧することができます。詳細はreadmeをご覧ください。\n\n", "Please refer to the readme for details.\n\n")
+	error_message += tltx("内部エラーが発生しました。", "An internal error has occurred.")
+	msgdialog error_message
 	end
 	return
