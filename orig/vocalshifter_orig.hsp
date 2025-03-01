@@ -1,3 +1,17 @@
+#packopt name "vocalshifter"
+// #packopt icon "vocalshifter.ico"
+
+#include "hsp3utf.as"
+#include "vsaudio.as"
+#include "vsconfig.as"
+#include "vscore.as"
+#include "vsedit.as"
+#include "vsgui.as"
+#include "vsmidi.as"
+#include "vsproject.as"
+#include "vsutil.as"
+#include "vsvst.as"
+
 #uselib "kernel32.dll"
 #func LoadLibraryA "LoadLibraryA" str
 #func GetProcAddress "GetProcAddress" int, sptr
